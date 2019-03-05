@@ -1,6 +1,8 @@
 package com.suwec.framework.utils;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -12,6 +14,8 @@ import android.net.NetworkInfo;
 import android.support.v4.app.ActivityCompat;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 
 import java.io.File;
 import java.net.Inet6Address;
@@ -26,12 +30,12 @@ import java.util.List;
  */
 public class AndroidUtil {
 
-    public static final String TAG = "AndroidUtil";
-    public static final String NET_WIFI = "WIFI";
-    public static final String NET_4G = "4G";
-    public static final String NET_3G = "3G";
-    public static final String NET_2G = "2G";
-    public static final String NET_UNKNOWN = "UNKNOWN";
+    private static final String TAG = "AndroidUtil";
+    private static final String NET_WIFI = "WIFI";
+    private static final String NET_4G = "4G";
+    private static final String NET_3G = "3G";
+    private static final String NET_2G = "2G";
+    private static final String NET_UNKNOWN = "UNKNOWN";
 
     /**
      * 获取手机唯一序列号
@@ -44,6 +48,7 @@ public class AndroidUtil {
     /**
      * 获取手机序列号
      */
+    @SuppressLint("HardwareIds")
     public static String getDeviceId(Context context) {
         String deviceID = null;
 
@@ -97,8 +102,7 @@ public class AndroidUtil {
      */
     public static String getApplicationId(Context context) {
         try {
-            String pkName = context.getPackageName();
-            return pkName;
+            return context.getPackageName();
         } catch (Exception e) {
         }
         return null;
@@ -314,5 +318,31 @@ public class AndroidUtil {
      */
     public static String getDeviceBrand() {
         return android.os.Build.BRAND;
+    }
+
+    /**
+     * 关闭系统键盘
+     */
+    public static void closeKeyBoards(Activity activity) {
+        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(activity.getWindow().getDecorView().getApplicationWindowToken(),
+                InputMethodManager.HIDE_NOT_ALWAYS);
+    }
+
+    /**
+     * 关闭系统键盘
+     * @param view
+     */
+    public static void closeKeyBoard(Context context,View view) {
+        InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+    }
+
+    public static void showKeyBoard(Context context,View view){
+        InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (imm != null){
+            view.requestFocus();
+            imm.showSoftInput(view,0);
+        }
     }
 }

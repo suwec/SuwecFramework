@@ -342,7 +342,7 @@ public class AndroidUtil {
         InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
         if (imm != null){
             view.requestFocus();
-            imm.showSoftInput(view,0);
+            imm.showSoftInput(view,InputMethodManager.SHOW_FORCED);
         }
     }
 }
